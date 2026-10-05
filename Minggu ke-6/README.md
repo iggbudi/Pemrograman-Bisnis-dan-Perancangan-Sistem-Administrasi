@@ -45,16 +45,38 @@ ERD adalah peta data, bukan urutan kerja program.
 - **Primary Key (PK)** adalah identitas unik setiap baris: `produk.id_produk` dan `transaksi.id_transaksi`.
 - **Foreign Key (FK)** adalah rujukan: `transaksi.id_produk` menunjuk `produk.id_produk`. Nilai FK boleh berulang karena produk yang sama dapat dibeli beberapa kali.
 
-```text
-PRODUK                              TRANSAKSI
-PK id_produk                        PK id_transaksi
-   nama                                tanggal
-   harga                            FK id_produk
-   stok                                jumlah
-                                       harga_satuan
+### Diagram ERD database kasir
 
-produk.id_produk (PK) ← transaksi.id_produk (FK)
+Diagram berikut sesuai dengan tabel `produk` yang digunakan oleh fungsi CRUD pada `database.py`. Struktur lengkap tabel dan relasinya mengacu pada `CREATE TABLE` di [`buat_database.py`](kode-praktik/buat_database.py), karena `database.py` mengelola data, bukan mendefinisikan tabel. GitHub menampilkan blok Mermaid ini sebagai diagram.
+
+```mermaid
+erDiagram
+    produk ||..o{ transaksi : "dicatat dalam"
+
+    produk {
+        INTEGER id_produk PK "ID otomatis dan unik"
+        TEXT nama "Wajib terisi"
+        INTEGER harga "Angka bulat lebih dari 0"
+        INTEGER stok "Minimal 0, nilai awal 0"
+    }
+
+    transaksi {
+        INTEGER id_transaksi PK "ID otomatis dan unik"
+        TEXT tanggal "Wajib terisi, format YYYY-MM-DD"
+        INTEGER id_produk FK "Merujuk produk.id_produk, wajib terisi"
+        INTEGER jumlah "Lebih dari 0"
+        INTEGER harga_satuan "Harga saat transaksi, wajib terisi"
+    }
 ```
+
+**Cara membaca diagram:**
+- `PK` menandai identitas unik; `FK` menandai rujukan ke tabel lain.
+- `||` di sisi `produk` berarti setiap transaksi harus menunjuk **tepat satu produk**.
+- `o{` di sisi `transaksi` berarti satu produk dapat memiliki **nol atau banyak transaksi**.
+- Garis putus-putus (`..`) berarti identitas transaksi menggunakan PK sendiri (`id_transaksi`), bukan gabungan dengan ID produk.
+- Tanggal berformat `YYYY-MM-DD` adalah konvensi pengisian pada contoh; skrip belum memeriksa format tanggal secara otomatis.
+
+**Hubungan dengan `database.py`:** `tambah_produk()` mengisi `nama`, `harga`, dan `stok`; `daftar_produk()` membaca keempat kolom produk; `ubah_harga()` dan `hapus_produk()` memilih baris berdasarkan `id_produk`. `buka_koneksi()` mengaktifkan penjaga FK, sehingga produk yang masih dirujuk transaksi tidak dapat dihapus. Fungsi CRUD transaksi belum disediakan pada modul ini.
 
 Hubungannya **1:N**: satu produk boleh mempunyai **0..N** catatan transaksi; setiap transaksi menunjuk tepat satu produk yang ada. FK diletakkan di sisi banyak, yaitu tabel `transaksi`.
 
