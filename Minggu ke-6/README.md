@@ -1,7 +1,7 @@
 # Panduan Praktik dan Latihan Minggu 6
 
 **Mata kuliah:** Pemograman Bisnis & Perancangan Sistem Administrasi  
-**Topik:** ERD, basis data SQLite, dan operasi CRUD dari Python
+**Topik:** ERD, basis data SQLite, dan operasi CRUD dari Python melalui aplikasi Streamlit
 
 > Skrip yang dibagikan adalah bahan awal praktik, bukan tugas yang sudah selesai. Yang harus dibuktikan bukan hanya program berjalan, tetapi juga pemahaman hubungan tabel serta hasil pengelolaan datanya.
 
@@ -15,6 +15,11 @@
 | [Outline materi](minggu-06-outline-basis-data-sqlite-crud.md) | Alur dan contoh materi dua pertemuan. |
 | [kode-praktik/buat_database.py](kode-praktik/buat_database.py) | Membuat database, dua tabel berelasi, dan data awal. |
 | [kode-praktik/uji_aturan.py](kode-praktik/uji_aturan.py) | Menguji aturan harga serta penjaga hubungan antartabel. |
+| [6.2/kode-praktik/database.py](6.2/kode-praktik/database.py) | Fungsi koneksi dan CRUD produk; `hapus_produk()` dilengkapi mahasiswa (pertemuan 2). |
+| [6.2/kode-praktik/app.py](6.2/kode-praktik/app.py) | Aplikasi Streamlit awal: tampil dan tambah sudah jadi; ubah harga dan hapus dilengkapi mahasiswa (pertemuan 2). |
+| [Folder 6.2](6.2/README.md) | Seluruh bahan pertemuan 2: script `kode-praktik`, slide, dan lembar kerja. |
+| [Slide pertemuan 2](6.2/minggu-06-pertemuan-2-slide-crud-streamlit.pptx) | Slide khusus CRUD lewat aplikasi Streamlit. |
+| [Lembar kerja pertemuan 2 (Word)](6.2/minggu-06-pertemuan-2-lembar-kerja-crud-streamlit.docx) · [PDF](6.2/minggu-06-pertemuan-2-lembar-kerja-crud-streamlit.pdf) | Bagian B (B1–B5) saja, dengan persiapan khusus Selasa. |
 
 Seluruh teori ERD yang dibutuhkan tersedia pada bahan Minggu 6. **Tidak perlu membuka kembali modul Minggu 3.**
 
@@ -22,7 +27,7 @@ Seluruh teori ERD yang dibutuhkan tersedia pada bahan Minggu 6. **Tidak perlu me
 
 1. Di halaman repository GitHub, pilih **Code → Download ZIP**, kemudian ekstrak ZIP. Jangan menjalankan file dari dalam ZIP.
 2. Buka folder **Minggu ke-6** untuk membaca bahan ajar. Buat folder kerja terpisah bernama **minggu-06** agar bahan awal dan pekerjaan sebelumnya tetap aman.
-3. Salin `buat_database.py` dan `uji_aturan.py` dari `kode-praktik` ke folder kerja tersebut.
+3. Salin `buat_database.py` dan `uji_aturan.py` dari `kode-praktik` ke folder kerja tersebut. Untuk pertemuan kedua, salin juga `database.py` dan `app.py` dari `6.2/kode-praktik` ke folder kerja yang sama.
 4. Buka VS Code → **File → Open Folder**, lalu pilih folder kerja `minggu-06`.
 5. Pilih **Terminal → New Terminal**. Pastikan terminal berada di folder yang berisi kedua skrip, bukan di folder induknya.
 6. Periksa Python:
@@ -33,7 +38,15 @@ python --version
 
 Harus muncul Python 3. Di Windows, gunakan `py --version` jika `python` tidak dikenali. Jika memakai `py`, gunakan `py` juga untuk semua perintah menjalankan skrip berikutnya.
 
-**Tidak perlu memasang SQLite, MySQL, XAMPP, atau paket tambahan.** Modul `sqlite3` sudah bawaan Python. SQLite Viewer di VS Code hanya alat bantu opsional.
+**Tidak perlu memasang SQLite, MySQL, atau XAMPP.** Modul `sqlite3` sudah bawaan Python. SQLite Viewer di VS Code hanya alat bantu opsional.
+
+7. **Sebelum pertemuan kedua**, pasang Streamlit satu kali (perlu internet; lewati jika sudah terpasang sejak Minggu 5):
+
+```bash
+python -m pip install streamlit
+```
+
+Periksa dengan `python -m streamlit version`. Pemasangan dilakukan di rumah atau sebelum kelas, bukan saat praktik berlangsung.
 
 ## 3. Pahami ERD sebelum menjalankan skrip
 
@@ -169,55 +182,71 @@ Untuk tema lain, gunakan pola dua tabel berelasi yang sama. Jika mengganti nama 
 3. Jelaskan akibat data transaksi yang merujuk produk tidak ada terhadap laporan bisnis.
 4. Isi refleksi **A5**: mengapa validasi Python dan aturan database sama-sama diperlukan?
 
-## 6. Pertemuan kedua: bangun CRUD dari Python
+## 6. Pertemuan kedua: CRUD dengan aplikasi Streamlit
 
-Kedua skrip awal **belum menyediakan menu CRUD**. Anda membuat file berikut dengan mengikuti kode dan petunjuk pada lembar kerja Minggu 6:
+Pada pertemuan kedua, data dikelola lewat **halaman web Streamlit**, bukan menu terminal. Pekerjaan dibagi menjadi dua file:
 
-| File yang dibuat | Tanggung jawab |
-|---|---|
-| `database.py` | Koneksi serta fungsi tambah, tampil, ubah harga, dan hapus produk. |
-| `main.py` | Menu terminal, input pengguna, tampilan hasil, dan penanganan kesalahan. |
+| File | Tanggung jawab | Status awal |
+|---|---|---|
+| `database.py` | Koneksi serta fungsi tambah, tampil, ubah harga, dan hapus produk. Tidak berisi kode Streamlit. | Hampir jadi; `hapus_produk()` dilengkapi. |
+| `app.py` | Tampilan: formulir input, tombol, pesan berhasil/gagal, dan tabel produk. | Tampil dan tambah sudah jadi; ubah harga dan hapus dilengkapi. |
 
-Bagi kelas jalur Streamlit, fungsi `database.py` tetap sama; pemanggilnya dapat menggunakan `app.py` sesuai arahan dosen. Menu terminal adalah jalur standar bahan ini.
+`app.py` hanya **memanggil** fungsi `database.py`. Pemisahan ini membuat `database.py` dapat dipakai ulang oleh tampilan apa pun, termasuk aplikasi Minggu 7.
 
-### Latihan D — Implementasikan fungsi database
+### Cara kerja Streamlit yang perlu dipahami
 
-1. Buat `database.py` satu folder dengan `kasir.db`.
-2. Ikuti **B1** untuk membuat `buka_koneksi()`, `tambah_produk()`, `daftar_produk()`, dan `ubah_harga()`.
-3. Lengkapi `hapus_produk(id_produk)` mengikuti **B2**. Gunakan `DELETE ... WHERE id_produk = ?`, parameter satu elemen `(id_produk,)`, serta kembalikan `cursor.rowcount`.
-4. Gunakan parameter `?`; jangan merangkai nilai input ke string SQL.
-5. Panggil `commit()` setelah perubahan data dan tutup koneksi dalam `finally`.
-6. Aktifkan FK di setiap koneksi aplikasi melalui `buka_koneksi()`.
+- Setiap kali tombol ditekan, Streamlit **menjalankan ulang seluruh `app.py` dari atas ke bawah**.
+- `st.form(...)` mengelompokkan isian; data baru diproses setelah tombol formulir ditekan.
+- `st.number_input(..., step=1)` hanya menerima angka bulat, sehingga isian seperti `abc` tidak bisa diketik. Validasi tetap diperlukan untuk aturan lain, misalnya nama kosong.
+- Tabel daftar produk diletakkan **paling bawah** agar dibaca setelah perubahan diproses dan selalu menampilkan data terbaru.
+- Pesan ditampilkan dengan `st.success(...)`, `st.warning(...)`, dan `st.error(...)`.
 
-### Latihan E — Buat menu dan jalankan
+### Jalankan aplikasi awal
 
-1. Buat `main.py` mengikuti **B3**: tampilkan, tambah, ubah harga, hapus, dan keluar.
-2. Gunakan `int()` untuk harga rupiah, stok, dan ID.
-3. Tangani `ValueError` untuk isian bukan angka dan `sqlite3.IntegrityError` untuk pelanggaran aturan database.
-4. Minta konfirmasi sebelum menghapus. Jangan menjalankan `UPDATE` atau `DELETE` tanpa `WHERE`.
-5. Jalankan:
+Jalankan `buat_database.py` terlebih dahulu jika `kasir.db` belum ada, kemudian:
 
 ```bash
-python main.py
+python -m streamlit run app.py
 ```
 
-6. Pilih menu tampilkan untuk memeriksa data awal.
+Browser akan membuka halaman **Kelola Produk**. Jika tidak terbuka otomatis, salin alamat `http://localhost:8501` dari terminal ke browser. Untuk menghentikan aplikasi, klik terminal lalu tekan **Ctrl+C**.
+
+Pada aplikasi awal, tambah produk dan tabel daftar sudah berfungsi. Tombol ubah harga dan hapus masih menampilkan pesan **belum dilengkapi**.
+
+### Latihan D — Lengkapi `hapus_produk()`
+
+1. Buka `database.py` dan pelajari pola `ubah_harga()`.
+2. Lengkapi `hapus_produk(id_produk)` mengikuti **B2**: `DELETE FROM produk WHERE id_produk = ?`, parameter satu elemen `(id_produk,)`, `commit()`, kembalikan `cursor.rowcount`, dan tutup koneksi dalam `finally`.
+3. Gunakan parameter `?`; jangan merangkai nilai input ke string SQL.
+4. Jangan menghapus baris `PRAGMA foreign_keys = ON` di `buka_koneksi()`.
+
+### Latihan E — Lengkapi `app.py`
+
+1. **E1 – Ubah harga:** ganti baris `st.info(...)` pada bagian ubah harga. Panggil `database.ubah_harga(id_ubah, harga_baru)`; tampilkan `st.warning` jika hasilnya 0 (ID tidak ditemukan) dan `st.success` jika berhasil. Tangkap `sqlite3.IntegrityError` dengan `st.error`.
+2. **E2 – Hapus:** ganti baris `st.info(...)` pada bagian hapus. Jika kotak konfirmasi belum dicentang, tampilkan `st.warning` dan **jangan** menghapus apa pun. Jika sudah dicentang, panggil `database.hapus_produk(id_hapus)` dan tangani hasil 0 serta `sqlite3.IntegrityError`.
+3. Ikuti petunjuk di komentar `# LATIHAN E1` dan `# LATIHAN E2`, serta contoh bagian tambah produk yang sudah jadi.
+4. Simpan file. Di browser, klik **Rerun** di pojok kanan atas atau tekan **R** agar perubahan kode terbaca.
+
+> Kelas yang belum dapat memasang Streamlit boleh memakai jalur cadangan menu terminal `main.py` sesuai arahan dosen. Fungsi `database.py` tetap sama.
 
 ## 7. Latihan pengujian CRUD
 
-Jalankan skenario berikut berurutan pada database latihan. Setelah setiap perubahan, tampilkan ulang daftar produk. Catat hasil asli pada **B4** dan jelaskan satu perbaikan jika ada hasil yang berbeda.
+Jalankan skenario berikut berurutan pada database latihan. Setelah setiap aksi, periksa tabel **Daftar produk** di bagian bawah halaman. Catat hasil asli pada **B4** dan jelaskan satu perbaikan jika ada hasil yang berbeda.
 
 | No | Skenario | Hasil yang diharapkan |
 |---|---|---|
-| 1 | Tambah Penghapus, harga 2000, stok 15 | Produk tersimpan dan muncul dengan ID baru. |
-| 2 | Ubah harga Pulpen ID 2 menjadi 3500 | Harga baru terlihat; `rowcount` = 1. |
-| 3 | Ubah harga ID 999 yang tidak ada | `rowcount` = 0; tampil pesan ID tidak ditemukan. |
-| 4a | Hapus Buku Tulis ID 1 yang memiliki transaksi | Ditolak karena FK; produk dan transaksi tetap ada. |
-| 4b | Hapus Map Plastik ID 3 yang tidak memiliki transaksi | Berhasil; produk lain tetap ada. |
-| 5 | Tambah produk dengan harga `abc` | Pesan isian harus angka bulat; program tetap berjalan. |
-| 6 | Tambah produk dengan harga `-5` | Ditolak oleh aturan `CHECK`; program tetap berjalan. |
+| 1 | Tambah Penghapus, harga 2000, stok 15 | Pesan hijau; produk muncul di tabel dengan ID baru. |
+| 2 | Ubah harga Pulpen ID 2 menjadi 3500 | Pesan berhasil; harga baru terlihat di tabel. |
+| 3 | Ubah harga ID 999 yang tidak ada | Pesan kuning **ID 999 tidak ditemukan**; tabel tidak berubah. |
+| 4a | Hapus Buku Tulis ID 1 yang memiliki transaksi (centang konfirmasi) | Ditolak karena FK; produk dan transaksi tetap ada. |
+| 4b | Hapus Map Plastik ID 3 yang tidak memiliki transaksi (centang konfirmasi) | Berhasil; produk lain tetap ada. |
+| 5 | Tambah produk dengan nama kosong atau hanya spasi | Ditolak oleh validasi Python: **Nama produk wajib diisi**. |
+| 6 | Tambah produk dengan harga `-5` | Ditolak oleh aturan `CHECK` database; aplikasi tetap berjalan. |
+| 7 | Tekan Hapus untuk ID 2 **tanpa** mencentang konfirmasi | Pesan peringatan; tidak ada data yang terhapus. |
 
-**Uji penyimpanan:** keluar dari program, jalankan lagi, lalu tampilkan daftar. Data hasil tambah/ubah/hapus yang berhasil harus tetap tersimpan.
+Pada skenario 5, yang menolak adalah Python (lapis depan). Pada skenario 6, yang menolak adalah database (lapis belakang). Kolom harga sengaja tidak diberi batas minimum di Streamlit agar penjaga `CHECK` dapat dibuktikan.
+
+**Uji penyimpanan:** hentikan aplikasi dengan Ctrl+C, jalankan lagi `python -m streamlit run app.py`, lalu periksa tabel. Data hasil tambah/ubah/hapus yang berhasil harus tetap tersimpan.
 
 Jika Anda menambahkan relasi yang membuat Map Plastik sudah dirujuk tabel lain, skenario 4b tidak lagi memakai prasyarat yang sama. Gunakan produk uji yang benar-benar belum dirujuk dan tulis ID aktualnya; penolakan FK tidak boleh diakali dengan mematikan penjaganya.
 
@@ -228,8 +257,8 @@ minggu-06/
 ├── kasir.db                  # atau nama database proyek
 ├── buat_database.py          # termasuk tabel tambahan Anda
 ├── uji_aturan.py
-├── database.py               # fungsi CRUD yang Anda buat
-├── main.py                   # atau app.py sesuai jalur kelas
+├── database.py               # hapus_produk() sudah dilengkapi
+├── app.py                    # ubah harga dan hapus sudah dilengkapi (atau main.py untuk jalur cadangan)
 └── lembar-kerja-terisi.docx   # atau PDF / jawaban-latihan.md
 ```
 
@@ -237,7 +266,8 @@ Lampirkan:
 - Rancangan tabel A1 beserta penjelasan relasi tabel tambahan.
 - Bukti tabel tambahan dan data awal dapat dibaca.
 - Hasil uji A–C dan seluruh skenario CRUD pada tabel pengujian.
-- Bukti data tetap ada setelah program ditutup dan dibuka kembali.
+- Tangkapan layar halaman Streamlit untuk skenario 1, 4a, dan 6.
+- Bukti data tetap ada setelah aplikasi dihentikan dan dijalankan kembali.
 - Refleksi A5 dan B5 serta satu perbaikan yang dilakukan.
 
 Tidak ada tenggat baru pada panduan ini; ikuti jadwal pengumpulan yang disampaikan dosen.
@@ -249,9 +279,10 @@ Tidak ada tenggat baru pada panduan ini; ikuti jadwal pengumpulan yang disampaik
 - [ ] `buat_database.py` dan `uji_aturan.py` dapat dijalankan.
 - [ ] Fungsi tambah, tampil, ubah, dan hapus menggunakan query berparameter.
 - [ ] Penjaga FK aktif di setiap koneksi aplikasi; pengecualian tanpa FK hanya untuk demonstrasi uji C.
-- [ ] Penghapusan produk yang masih dirujuk ditolak.
-- [ ] Input salah tidak menghentikan program.
-- [ ] Data berhasil dibaca kembali setelah program dibuka ulang.
+- [ ] Aplikasi Streamlit dapat dijalankan dan keempat operasi CRUD bekerja dari halaman web.
+- [ ] Penghapusan produk yang masih dirujuk ditolak, dan penghapusan tanpa konfirmasi tidak dijalankan.
+- [ ] Isian yang salah menampilkan pesan, bukan membuat aplikasi berhenti.
+- [ ] Data berhasil dibaca kembali setelah aplikasi dijalankan ulang.
 - [ ] Hasil pengujian dan refleksi diisi berdasarkan pelaksanaan nyata.
 
 ## 10. Jika muncul masalah
@@ -259,8 +290,13 @@ Tidak ada tenggat baru pada panduan ini; ikuti jadwal pengumpulan yang disampaik
 | Pesan / kondisi | Yang diperiksa |
 |---|---|
 | `python` tidak dikenali | Coba `py`; pastikan Python sudah terpasang. |
+| `No module named streamlit` | Jalankan `python -m pip install streamlit` dengan perintah Python yang sama (`python` atau `py`). |
+| `streamlit` tidak dikenali | Gunakan `python -m streamlit run app.py`, bukan `streamlit run app.py`. |
+| Browser tidak terbuka | Salin alamat `http://localhost:8501` dari terminal ke browser. |
+| Perubahan kode tidak terlihat | Simpan file, lalu klik **Rerun** atau tekan **R** di halaman Streamlit. |
+| `NotImplementedError: hapus_produk()` | Latihan D belum dikerjakan; lengkapi `hapus_produk()` di `database.py`. |
 | `no such table: produk` | Jalankan `buat_database.py`; pastikan terminal berada di folder kerja yang benar. |
-| `No module named 'database'` | Pastikan `database.py` satu folder dengan `main.py`, bukan bernama `database.py.txt`. |
+| `No module named 'database'` | Pastikan `database.py` satu folder dengan `app.py`, bukan bernama `database.py.txt`. |
 | `database is locked` | Tutup aplikasi/koneksi lain yang menahan transaksi, lalu coba kembali. |
 | `CHECK constraint failed` | Nilai melanggar aturan; periksa harga, stok, atau jumlah. |
 | `FOREIGN KEY constraint failed` | ID rujukan tidak ada, atau Anda menghapus data yang masih dirujuk. |

@@ -3,13 +3,13 @@
 **Mata kuliah:** PEMOGRAMAN BISNIS & PERANCANGAN SISTEM ADMINISTRASI  
 **Kelas:** ABT-3D, Administrasi Bisnis — Politeknik Negeri Semarang  
 **Alokasi:** Senin 16.00–17.30 WIB (KAN 1) dan Selasa 14.00–15.30 WIB (KAN3), masing-masing 90 menit  
-**Status:** ACC awal (4 Oktober 2026); revisi penjelasan ERD mandiri sesuai masukan dosen. Turunan: slide `minggu-06-slide-basis-data-sqlite-crud.pptx`, lembar kerja `minggu-06-lembar-kerja-sqlite-crud.docx/.pdf`, kode di `kode-praktik/` (dibagikan) dan `kode-dosen/` (kunci).
+**Status:** ACC awal (4 Oktober 2026); revisi penjelasan ERD mandiri sesuai masukan dosen; revisi 6 Oktober 2026: Streamlit dimajukan ke Pertemuan 2 (perlu konfirmasi ulang dosen). Cadangan versi terminal di `cadangan-sebelum-streamlit-6-2/`. Turunan: slide `minggu-06-slide-basis-data-sqlite-crud.pptx`, lembar kerja `minggu-06-lembar-kerja-sqlite-crud.docx/.pdf`, kode Pertemuan 1 di `kode-praktik/`; seluruh kode Pertemuan 2 di `6.2/` (`6.2/kode-praktik/` dibagikan, `6.2/kode-dosen/` kunci). Slide dan lembar kerja khusus Pertemuan 2 juga di `6.2/` (`minggu-06-pertemuan-2-slide-crud-streamlit.pptx`, `minggu-06-pertemuan-2-lembar-kerja-crud-streamlit.docx/.pdf`).
 
 ## Posisi dalam proyek
 
-Minggu 3 menghasilkan rancangan basis data relasional (entitas, atribut, PK/FK, normalisasi). Minggu 4–5 membangun logika bisnis Python yang modular dan bersih (`main.py` + `logika_bisnis.py`). Minggu 6 menghubungkan keduanya: rancangan tabel diwujudkan menjadi database SQLite nyata, lalu program Python menyimpan, menampilkan, mengubah, dan menghapus data lewat modul baru `database.py`. Minggu 7 baru masuk antarmuka Streamlit penuh; **minggu ini tampilan utama masih lewat terminal/console**.
+Minggu 3 menghasilkan rancangan basis data relasional (entitas, atribut, PK/FK, normalisasi). Minggu 4–5 membangun logika bisnis Python yang modular dan bersih (`main.py` + `logika_bisnis.py`). Minggu 6 menghubungkan keduanya: rancangan tabel diwujudkan menjadi database SQLite nyata, lalu program Python menyimpan, menampilkan, mengubah, dan menghapus data lewat modul baru `database.py`. Pertemuan 1 masih lewat terminal (skrip pembuat database dan uji aturan); **Pertemuan 2 memakai antarmuka Streamlit (`app.py`)** untuk CRUD, sehingga Minggu 7 dapat dipakai untuk pendalaman Streamlit.
 
-**Catatan jalur Streamlit Minggu 5:** kelas yang memakai modul alternatif Streamlit pada Minggu 5 tetap mengerjakan `database.py` yang sama persis. Bedanya hanya pada tampilan: fungsi database dipanggil dari `app.py` (Streamlit), bukan dari `main.py` (terminal). Lapisan database tidak bergantung pada tampilan.
+**Catatan jalur Minggu 5:** kelas jalur Streamlit Minggu 5 sudah memasang Streamlit. Kelas jalur terminal perlu memasangnya sebelum Selasa; bila gagal, jalur cadangan `main.py` (terminal) memakai `database.py` yang sama persis. Lapisan database tidak bergantung pada tampilan.
 
 **Acuan RPS minggu 6:** mahasiswa mampu membuat basis data SQLite dan melakukan operasi data dasar. Bahan kajian: SQLite, SQL DDL/DML, pembuatan tabel, koneksi Python, query berparameter, serta operasi CRUD dasar. Pengalaman belajar: membuat database dan tabel proyek, mengisi data awal, lalu menguji tambah, tampil, ubah, dan hapus data. Indikator: database dan tabel terbentuk; PK/FK sesuai rancangan; seluruh operasi CRUD berhasil dan data dapat dibaca kembali. Evaluasi: praktikum database dan CRUD.
 
@@ -19,12 +19,13 @@ Mahasiswa dapat:
 1. Menjelaskan basis data sebagai “lemari arsip digital”: database = lemari, tabel = buku besar, baris = satu catatan, kolom = kolom formulir.
 2. Menjelaskan ERD (entitas, atribut, relasi, kardinalitas, PK/FK) dari contoh di modul ini dan menerjemahkannya menjadi perintah SQL `CREATE TABLE` dengan tipe data, PRIMARY KEY, FOREIGN KEY, dan aturan isian (`CHECK`) yang benar.
 3. Membuat file database SQLite (`.db`) dari skrip Python dan mengisi beberapa baris data awal sebagai contoh.
-4. Menghubungkan Python ke SQLite (`sqlite3`) dan menjalankan operasi CRUD dasar dengan **query berparameter**, dikemas sebagai fungsi dalam modul `database.py`.
+4. Menghubungkan Python ke SQLite (`sqlite3`) dan menjalankan operasi CRUD dasar dengan **query berparameter**, dikemas sebagai fungsi dalam modul `database.py`, lalu memanggilnya dari aplikasi Streamlit `app.py` (formulir, tombol, pesan, dan tabel).
 5. Memverifikasi hasil: data tersimpan dapat dibaca kembali, perubahan terlihat, dan database menolak penghapusan yang akan merusak data terkait.
 
-## Persiapan alat (tanpa instalasi tambahan)
+## Persiapan alat
 
 - Cukup Python + VS Code dari Minggu 2. **Tidak perlu memasang program `sqlite3` terpisah** — di Windows program itu biasanya tidak tersedia. Semua SQL dijalankan lewat skrip Python (`sqlite3` sudah bawaan Python) dengan `executescript()`.
+- **Streamlit untuk Pertemuan 2:** `python -m pip install streamlit` dipasang sebelum kelas (perlu internet). Kelas jalur Streamlit Minggu 5 sudah memilikinya.
 - Opsional untuk melihat isi tabel secara visual: ekstensi VS Code “SQLite Viewer”. Bila tidak bisa dipasang, cukup lihat hasil `SELECT` di terminal.
 - Dosen membagikan **skrip awal `buat_database.py`** berisi tabel `produk` yang sudah jadi; mahasiswa menambahkan tabel berelasi dari rancangan yang dibuat di lembar kerja Minggu 6. Ini menghemat waktu mengetik dan mengurangi salah ketik.
 - Nama file database: `kasir.db` untuk tema kasir (contoh berjalan sejak Minggu 4). Kelompok dengan tema lain memakai `<nama_proyek>.db` dengan pola yang sama.
@@ -117,7 +118,7 @@ Data di atas hanya ilustrasi hubungan, bukan instruksi menambah data awal skrip.
 | 25–40 | Dosen menjalankan `buat_database.py`: `CREATE TABLE IF NOT EXISTS produk(...)` dan `transaksi(...)` dengan FOREIGN KEY. Tunjukkan `PRAGMA foreign_keys = ON` dan aturan `CHECK`. Jalankan skrip dua kali untuk menunjukkan `IF NOT EXISTS` mencegah error “table already exists”. | Dua tabel terbentuk; tipe data dan kunci sesuai contoh ERD Minggu 6. |
 | 40–65 | Praktik: unduh skrip awal, sesuaikan/tambahkan satu tabel berelasi dari rancangan sederhana yang dibuat di A1 Minggu 6, isi 2–3 baris data contoh (`INSERT`), jalankan. | File `.db` ada; tabel memuat data awal. |
 | 65–85 | Uji aturan database (lihat “Tiga uji pelanggaran” di bawah) lalu periksa isi dengan `SELECT * FROM produk;`. | Mahasiswa melihat pesan error dan menjelaskan mengapa kunci/aturan wajib dijaga. |
-| 85–90 | Rangkuman: tabel menyimpan data meski program ditutup; simpan file untuk pertemuan Selasa. | `kasir.db` dan `buat_database.py` tersimpan di folder proyek. |
+| 85–90 | Rangkuman: tabel menyimpan data meski program ditutup; simpan file untuk pertemuan Selasa. Ingatkan memasang Streamlit sebelum Selasa. | `kasir.db` dan `buat_database.py` tersimpan di folder proyek. |
 
 **Skrip awal `buat_database.py` (ilustrasi, bukan jawaban lengkap praktikum):**
 
@@ -160,18 +161,23 @@ Mengapa `transaksi` menyimpan `harga_satuan` sendiri? Jika harga produk nanti di
 
 Pertanyaan pengarah: tanpa aturan `CHECK`, SQLite sebenarnya **mau** menyimpan teks “seribu” di kolom angka (SQLite longgar soal tipe data). Siapa yang harus menjaga pintu masuk data? Jawaban: dua lapis — validasi Python Minggu 5 di depan, aturan database di belakang. Hapus baris uji C setelah demo.
 
-## Pertemuan 2 — Selasa: Python menyimpan dan mengelola data (90 menit)
+## Pertemuan 2 — Selasa: CRUD lewat aplikasi Streamlit (90 menit)
+
+**Prasyarat:** Streamlit sudah terpasang sebelum kelas (`python -m pip install streamlit`). Dosen mengingatkan di akhir pertemuan Senin. Kelas yang belum bisa memasang memakai jalur cadangan menu terminal (`6.2/kode-dosen/main.py`) dengan `database.py` yang sama.
+
+**Bahan awal yang dibagikan:** `6.2/kode-praktik/database.py` (lengkap kecuali `hapus_produk()`) dan `6.2/kode-praktik/app.py` (tampil dan tambah sudah jadi; ubah harga dan hapus diberi komentar `# LATIHAN E1/E2`). Kunci ada di `6.2/kode-dosen/`. Bahan awal dibuat hampir jadi agar 90 menit dipakai untuk memahami alur Streamlit–database, bukan mengetik ulang fungsi SQL.
 
 | Menit | Kegiatan | Bukti/cek cepat |
 |---|---|---|
-| 0–10 | Ulas tabel Senin; tunjuk fungsi Minggu 5 di `logika_bisnis.py` yang akan memakai data dari database. Perkenalkan rencana file: `main.py` (tampilan) → `logika_bisnis.py` (hitung) + `database.py` (simpan). | Mahasiswa bisa menyebut tugas tiap file. |
-| 10–25 | Dosen contohkan fungsi `buka_koneksi()`, `tambah_produk()`, dan `daftar_produk()` di `database.py` dengan query berparameter `?`. Jelaskan mengapa jangan menyusun query lewat rangkaian teks. | Program menyimpan satu baris dan membacanya kembali. |
-| 25–45 | Praktik INSERT dari `main.py`: minta input pengguna, ubah harga dengan `int()` (Minggu 5 memakai `float`; rupiah disimpan bulat), tangani input salah dengan `try/except`, lalu panggil `tambah_produk()`. | Data baru tampil saat `daftar_produk()` dipanggil ulang. |
-| 45–70 | Praktik `ubah_harga()` dan `hapus_produk()` berdasarkan `id`: tampilkan `rowcount` agar terlihat apakah ID ada; dosen contohkan konfirmasi “yakin hapus? (y/n)”. | Empat operasi CRUD berhasil pada data contoh. |
-| 70–85 | Uji silang empat skenario (lihat tabel uji di bawah); catat hasil aktual dan satu perbaikan. | Tabel uji terisi; data konsisten setelah setiap operasi. |
-| 85–90 | Refleksi dan jembatan ke Minggu 7: `database.py` tidak perlu diubah; Minggu 7 hanya mengganti `main.py` dengan form Streamlit. | File kerja dan catatan pengujian tersimpan. |
+| 0–10 | Ulas tabel Senin. Perkenalkan pembagian file: `app.py` (tampilan) → `database.py` (simpan); `logika_bisnis.py` Minggu 5 menyusul untuk perhitungan. | Mahasiswa bisa menyebut tugas tiap file. |
+| 10–20 | Dosen menelusuri `database.py`: `buka_koneksi()` dengan `PRAGMA`, query berparameter `?`, `commit()`, `rowcount`, `try/finally`. Mengapa jangan menyusun query lewat rangkaian teks. | Mahasiswa menunjuk baris `?` dan `commit()`. |
+| 20–35 | **Latihan D:** lengkapi `hapus_produk()` di `database.py`. | Fungsi mengembalikan `rowcount`; koneksi ditutup di `finally`. |
+| 35–50 | Jalankan `python -m streamlit run app.py`. Jelaskan model *rerun* (seluruh skrip dijalankan ulang setiap tombol ditekan), `st.form`, `st.number_input(step=1)`, `st.success/warning/error`, dan mengapa tabel diletakkan paling bawah. Coba tambah produk. | Halaman Kelola Produk terbuka; produk baru tampil di tabel. |
+| 50–70 | **Latihan E1/E2:** lengkapi bagian ubah harga dan hapus di `app.py`, termasuk konfirmasi `st.checkbox` dan penanganan `IntegrityError`. | Empat operasi CRUD berjalan dari halaman web. |
+| 70–85 | Uji delapan skenario (tabel di bawah); catat hasil aktual dan satu perbaikan; uji penyimpanan dengan menghentikan dan menjalankan ulang aplikasi. | Tabel uji B4 terisi; data tetap ada setelah aplikasi dijalankan ulang. |
+| 85–90 | Refleksi dan jembatan ke Minggu 7: `database.py` dipakai ulang; Minggu 7 menambah catat penjualan, laporan, pencarian, dan tata letak. | File kerja dan catatan pengujian tersimpan. |
 
-**Contoh pola `database.py` (ilustrasi):**
+**Contoh pola `database.py` (dibagikan; `hapus_produk()` dilengkapi mahasiswa):**
 
 ```python
 import sqlite3
@@ -222,45 +228,72 @@ def ubah_harga(id_produk, harga_baru):
 
 `hapus_produk(id_produk)` dibuat mahasiswa dengan pola yang sama (`DELETE ... WHERE id_produk = ?`).
 
-**Contoh pemanggilan dari `main.py`:**
+**Contoh pemanggilan dari `app.py` (bagian tambah produk, sudah jadi di bahan awal):**
 
 ```python
 import sqlite3
+
+import streamlit as st
+
 import database
 
-try:
-    nama = input("Nama produk: ")
-    harga = int(input("Harga (angka bulat, tanpa Rp/titik): "))
-    stok = int(input("Stok awal: "))
-    database.tambah_produk(nama, harga, stok)
-    print("Produk tersimpan.")
-except ValueError:
-    print("Harga dan stok harus angka bulat.")
-except sqlite3.IntegrityError as e:
-    print("Database menolak data:", e)
+st.title("Kelola Produk")
 
-for baris in database.daftar_produk():
-    print(baris)
+st.subheader("Tambah produk")
+with st.form("form_tambah", clear_on_submit=True):
+    nama = st.text_input("Nama produk")
+    harga = st.number_input("Harga (Rp, angka bulat)", step=1, value=0)
+    stok = st.number_input("Stok awal", min_value=0, step=1, value=0)
+    tombol_tambah = st.form_submit_button("Simpan produk")
+
+if tombol_tambah:
+    if nama.strip() == "":
+        st.error("Nama produk wajib diisi.")          # validasi Python (lapis depan)
+    else:
+        try:
+            database.tambah_produk(nama.strip(), harga, stok)
+            st.success(f"Produk {nama.strip()} tersimpan.")
+        except sqlite3.IntegrityError as e:
+            st.error(f"Database menolak data: {e}")  # aturan database (lapis belakang)
+
+# ... bagian ubah harga dan hapus (Latihan E1/E2) ...
+
+st.subheader("Daftar produk")   # dibaca paling akhir agar selalu terbaru
+st.dataframe(
+    [
+        {"ID": id_produk, "Nama": nama, "Harga": harga, "Stok": stok}
+        for id_produk, nama, harga, stok in database.daftar_produk()
+    ],
+    hide_index=True,
+)
 ```
 
-**Tabel uji Selasa (minimal empat skenario):**
+Kolom harga sengaja **tanpa** `min_value` agar mahasiswa dapat membuktikan bahwa aturan `CHECK` di database tetap menjaga data. Kolom stok memakai `min_value=0` sebagai contoh validasi di tampilan.
+
+**Tabel uji Selasa (delapan skenario):**
 
 | No | Skenario | Langkah | Hasil yang diharapkan |
 |---|---|---|---|
-| 1 | Tambah normal | Tambah “Penghapus”, 2000, stok 15 | Muncul di daftar dengan ID baru |
+| 1 | Tambah normal | Tambah “Penghapus”, 2000, stok 15 | `st.success`; muncul di tabel dengan ID baru |
 | 2 | Ubah harga | Ubah harga ID 2 (Pulpen) menjadi 3500 | `rowcount` = 1; harga baru tampil |
-| 3 | Ubah/hapus ID yang tidak ada | Ubah harga ID 999 | `rowcount` = 0; pesan “ID tidak ditemukan” |
-| 4 | Hapus produk yang sudah punya transaksi | Hapus ID 1 (Buku Tulis, dirujuk tabel `transaksi`) | Ditolak `FOREIGN KEY constraint failed`; data lain utuh. Hapus ID 3 (Map Plastik, tanpa transaksi) → berhasil dan hilang dari daftar |
+| 3 | Ubah ID yang tidak ada | Ubah harga ID 999 | `rowcount` = 0; `st.warning` “ID tidak ditemukan” |
+| 4a | Hapus produk yang punya transaksi | Hapus ID 1 (Buku Tulis), konfirmasi dicentang | Ditolak `FOREIGN KEY constraint failed`; data utuh |
+| 4b | Hapus produk tanpa transaksi | Hapus ID 3 (Map Plastik), konfirmasi dicentang | Berhasil; hilang dari tabel |
+| 5 | Nama kosong | Tambah produk dengan nama kosong/spasi | Ditolak validasi Python: “Nama produk wajib diisi” |
+| 6 | Harga negatif | Tambah produk dengan harga -5 | Ditolak `CHECK constraint failed`; aplikasi tetap berjalan |
+| 7 | Hapus tanpa konfirmasi | Hapus ID 2 tanpa mencentang | `st.warning`; tidak ada data terhapus |
 
-Data awal (diisi `buat_database.py`): Buku Tulis (ID 1, punya satu transaksi), Pulpen (ID 2), Map Plastik (ID 3). Lembar kerja menambah skenario 5–6 untuk input salah (`abc` dan harga negatif).
+Data awal (diisi `buat_database.py`): Buku Tulis (ID 1, punya satu transaksi), Pulpen (ID 2), Map Plastik (ID 3). Skenario versi terminal (isian `abc` → `ValueError`) tidak dipakai lagi karena `st.number_input` tidak menerima teks; skenario 5 menggantikannya untuk melatih validasi Python.
 
-Catatan praktik: gunakan selalu `?` (parameter) alih-alih menyisipkan nilai langsung ke string SQL; panggil `commit()` setelah `INSERT`/`UPDATE`/`DELETE`; tutup koneksi dengan `try/finally` (catatan: `with sqlite3.connect(...)` hanya mengurus commit, **tidak** menutup koneksi). Untuk pemula non-IT, tampilkan data dengan `print` dulu; tabel rapi menyusul di Streamlit Minggu 7.
+Catatan praktik: gunakan selalu `?` (parameter) alih-alih menyisipkan nilai langsung ke string SQL; panggil `commit()` setelah `INSERT`/`UPDATE`/`DELETE`; tutup koneksi dengan `try/finally` (catatan: `with sqlite3.connect(...)` hanya mengurus commit, **tidak** menutup koneksi). Jalankan Streamlit dengan `python -m streamlit run app.py` agar tidak bergantung pada PATH Windows. Setelah mengedit kode, simpan lalu tekan **R** atau **Rerun** di browser.
+
+**Dicadangkan untuk Minggu 7 (pendalaman Streamlit):** catat penjualan yang mengambil `harga_satuan` dari produk dan mengurangi stok dalam satu `commit`; laporan omzet per produk dengan `LEFT JOIN` dan `st.bar_chart`; pencarian produk dengan `LIKE ?`; tata letak `st.sidebar`/`st.tabs`; serta `st.session_state`.
 
 ## Luaran dan pemeriksaan
 
-- **File:** `kasir.db` (atau `<nama_proyek>.db`) berisi minimal dua tabel berelasi sesuai ERD; `buat_database.py`; `database.py` berisi fungsi CRUD berparameter; `main.py` (atau `app.py` untuk jalur Streamlit) yang memanggilnya.
-- **Bukti:** skrip yang bisa dijalankan, hasil `SELECT` sebelum/sesudah perubahan, hasil tiga uji pelanggaran Senin, dan tabel pengujian empat skenario Selasa.
-- **Kriteria selesai:** tabel terbentuk dengan PK/FK/CHECK sesuai rancangan di lembar kerja Minggu 6; `PRAGMA foreign_keys = ON` aktif di setiap koneksi; data awal terisi; operasi CRUD berhasil dan data dapat dibaca kembali; penghapusan yang melanggar relasi ditolak; input salah ditangani tanpa membuat program berhenti.
+- **File:** `kasir.db` (atau `<nama_proyek>.db`) berisi minimal dua tabel berelasi sesuai ERD; `buat_database.py`; `database.py` berisi fungsi CRUD berparameter; `app.py` Streamlit yang memanggilnya (atau `main.py` untuk jalur cadangan terminal).
+- **Bukti:** skrip yang bisa dijalankan, hasil `SELECT` sebelum/sesudah perubahan, hasil tiga uji pelanggaran Senin, tabel pengujian delapan skenario Selasa, dan tangkapan layar halaman Streamlit untuk skenario 1, 4a, dan 6.
+- **Kriteria selesai:** tabel terbentuk dengan PK/FK/CHECK sesuai rancangan di lembar kerja Minggu 6; `PRAGMA foreign_keys = ON` aktif di setiap koneksi; data awal terisi; operasi CRUD berhasil dari aplikasi Streamlit dan data dapat dibaca kembali setelah aplikasi dijalankan ulang; penghapusan yang melanggar relasi ditolak; penghapusan tanpa konfirmasi tidak dijalankan; input salah ditangani dengan pesan tanpa membuat aplikasi berhenti.
 - **Catatan pengajaran non-IT:** analogi lemari arsip/buku besar/nota, demonstrasi lebih dulu, skrip awal dibagikan agar waktu praktik dipakai untuk memahami bukan mengetik, gunakan data kecil (2–3 baris) agar mudah diperiksa manual, dan hindari istilah teknis tanpa contoh. Ingatkan untuk tidak menaruh data pribadi nyata — pakai data simulasi.
 
 **Sumber internal:** `rps/matriks-rps-pemograman-bisnis-perancangan-sistem-administrasi-python-streamlit-vscode.csv` (baris minggu 6); `bahan-ajar/modul/minggu-03-perancangan-basis-data-relasional.md`; `Minggu ke-5/minggu-05-modul-praktik-fungsi-modul-error-handling.docx` dan versi Streamlit-nya; `pengajaran/jadwal/jadwal-mengajar-polines-2026-2027.csv`.
